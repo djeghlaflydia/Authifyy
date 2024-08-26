@@ -2,42 +2,26 @@ package app;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.common.*;
 import com.google.zxing.qrcode.QRCodeWriter;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.shape.*;
+import javafx.fxml.*;
+import javafx.scene.*;
+import javafx.scene.control.*;
+import javafx.scene.image.*;
 import javafx.stage.Stage;
 
 import com.google.zxing.*;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.ReaderException;
-import com.google.zxing.Result;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.Files;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.nio.file.*;
+import java.util.logging.*;
 
 
 public class ThirdSeen extends Application {
