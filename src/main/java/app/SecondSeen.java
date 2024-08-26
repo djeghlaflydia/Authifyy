@@ -19,7 +19,7 @@ public class SecondSeen extends Application {
     @FXML
     private TextField EmailSignUp;
     @FXML
-    private TextField PassWordSignUp;
+    private PasswordField PassWordSignUp;
 
     @Override
     public void start(Stage stage) throws IOException {
