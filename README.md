@@ -25,7 +25,7 @@
    - Choose a QR code image from your file system.
    - The application reads and decodes the QR code, extracting and displaying the stored user information.
 
-   ![QR Code Scanning](https://github.com/user-attachments/assets/4896c3c6-a9db-45ce-8df0-2ebd51a02de8)
+   ![git2](https://github.com/user-attachments/assets/5a853473-bcff-4d01-9a1a-ae87a82f5864)
 
 ## Technologies Used
 
