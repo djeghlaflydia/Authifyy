@@ -16,6 +16,7 @@ public class MainSeen extends Application {
     private Connection connection;
     private Statement statement;
 
+
     @Override
     public void start(Stage stage) throws IOException {
 
