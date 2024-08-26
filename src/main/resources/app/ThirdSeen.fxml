@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="GUI" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.ThirdSeen">
+    <children>
+        <Pane fx:id="PaneShadw" layoutX="1.0" layoutY="1.0" prefHeight="599.0" prefWidth="899.0">
+         <children>
+            <Label layoutX="141.0" layoutY="67.0" text="Custom QR Code Builder">
+               <font>
+                  <Font name="Arial Bold Italic" size="30.0" />
+               </font>
+            </Label>
+            <Button fx:id="LogOut" layoutX="35.0" layoutY="532.0" mnemonicParsing="false" onAction="#LogOut" text="LogOut">
+               <font>
+                  <Font name="Arial Bold Italic" size="10.0" />
+               </font>
+            </Button>
+            <ImageView fx:id="ImageQR" fitHeight="247.0" fitWidth="256.0" layoutX="579.0" layoutY="164.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="addButton" layoutX="740.0" layoutY="435.0" mnemonicParsing="false" onAction="#addQR" text="Add QR">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+            <Button fx:id="createButton" layoutX="579.0" layoutY="435.0" mnemonicParsing="false" onAction="#createQR" prefHeight="31.0" prefWidth="111.0" text="Generate">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+            <Label fx:id="labelImage" alignment="CENTER" layoutX="579.0" layoutY="164.0" prefHeight="247.0" prefWidth="256.0" text="QR">
+               <font>
+                  <Font name="Arial Bold" size="30.0" />
+               </font>
+            </Label>
+            <Label layoutX="48.0" layoutY="187.0" text="Last Name" underline="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="48.0" layoutY="257.0" text="First name" underline="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="48.0" layoutY="327.0" text="Bac year" underline="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="48.0" layoutY="397.0" text="speciality" underline="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="SpecialityQR" layoutX="167.0" layoutY="390.0" prefHeight="44.0" prefWidth="297.0" promptText="Speciality">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="BacYearQR" layoutX="167.0" layoutY="320.0" prefHeight="44.0" prefWidth="297.0" promptText="Bac Year">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="FirstNameQR" layoutX="167.0" layoutY="250.0" prefHeight="44.0" prefWidth="297.0" promptText="First Name">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="LastNameQR" layoutX="167.0" layoutY="180.0" prefHeight="44.0" prefWidth="297.0" promptText="Last Name">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </TextField>
+            <Label layoutX="720.0" layoutY="27.0" text="Authify">
+               <font>
+                  <Font name="System Bold Italic" size="40.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="44.0" fitWidth="52.0" layoutX="669.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Pic/icon.png" />
+               </image>
+            </ImageView>
+         </children>
+        </Pane>
+    </children>
+</AnchorPane>
