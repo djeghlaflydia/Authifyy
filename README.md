@@ -15,8 +15,8 @@
    - Users can log in or sign up through the application’s login page.
    - Sign-up involves entering personal details, which are stored in the MySQL database.
   
-     ![git1](https://github.com/user-attachments/assets/a74e29df-55d2-4783-9ddf-8f2f46813db0)
-
+     ![git1](https://github.com/user-attachments/assets/67951f47-8893-4f37-beda-e59a1a44de8a)
+     
 2. **QR Code Generation**:
    - Upon successful registration, a QR code is generated that encapsulates the user’s information.
    - The QR code is saved as an image file and displayed within the application.
@@ -25,7 +25,7 @@
    - Users can select an existing QR code image from their file system.
    - The application reads and decodes the QR code, extracting and displaying the stored information.
   
-     ![git2](https://github.com/user-attachments/assets/eac6a91b-734e-40e8-9dc2-afedc8f58d05)
+   ![git2](https://github.com/user-attachments/assets/4896c3c6-a9db-45ce-8df0-2ebd51a02de8)
 
 ## Technologies Used
 
