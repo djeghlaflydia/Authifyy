@@ -3,11 +3,9 @@ package app;
 import com.almasb.fxgl.net.Connection;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.fxml.*;
 import javafx.scene.*;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -67,7 +65,7 @@ public class MainSeen extends Application {
     @FXML
     private TextField userNameLogIn;
     @FXML
-    private TextField PassWordLogIn;
+    private PasswordField PassWordLogIn;
 
     @FXML
     public void LogIn(ActionEvent event) {
