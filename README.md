@@ -1,42 +1,55 @@
 # Authify
 
-**Authify** is an innovative application designed to enhance the authentication process through QR code technology. It provides a user-friendly interface for secure login and sign-up functionalities, leveraging MySQL for database management. Upon registration, users can generate personalized QR codes that can be easily scanned for authentication purposes.
+**Authify** is a cutting-edge application designed to streamline the authentication process using QR code technology. This application features a user-friendly interface that facilitates secure login and registration, leveraging MySQL for robust database management. Upon registration, users receive personalized QR codes for secure and efficient authentication.
 
 ## Features
 
-- **User Authentication**: Secure login and registration using MySQL database.
-- **QR Code Generation**: Automatically generate a QR code upon user registration, containing essential information.
-- **QR Code Scanning**: Scan QR codes to retrieve and display user information, such as first name, last name, academic year, and specialty.
-- **Intuitive Interface**: A simple and clean user interface that allows for easy navigation and interaction.
+- **Secure Authentication**: Login and registration functionalities with secure MySQL database management.
+- **QR Code Generation**: Generate a unique QR code upon user registration, which contains essential personal information.
+- **QR Code Scanning**: Effortlessly scan QR codes to retrieve and display user details such as first name, last name, academic year, and specialty.
+- **Intuitive User Interface**: Clean and simple interface designed for easy navigation and use.
 
 ## How It Works
 
 1. **Login and Sign-Up**:
-   - Users can log in or sign up through the application’s login page.
-   - Sign-up involves entering personal details, which are stored in the MySQL database.
-  
-     ![git1](https://github.com/user-attachments/assets/67951f47-8893-4f37-beda-e59a1a44de8a)
-     
+   - Access the application’s login or sign-up page.
+   - Register by entering personal details, which are securely stored in the MySQL database.
+
+   ![Login Page](https://github.com/user-attachments/assets/67951f47-8893-4f37-beda-e59a1a44de8a)
+
 2. **QR Code Generation**:
-   - Upon successful registration, a QR code is generated that encapsulates the user’s information.
-   - The QR code is saved as an image file and displayed within the application.
+   - Upon successful registration, a QR code is generated containing the user’s information.
+   - This QR code is saved as an image file and displayed within the application for easy access.
 
 3. **QR Code Scanning**:
-   - Users can select an existing QR code image from their file system.
-   - The application reads and decodes the QR code, extracting and displaying the stored information.
-  
-   ![git2](https://github.com/user-attachments/assets/4896c3c6-a9db-45ce-8df0-2ebd51a02de8)
+   - Choose a QR code image from your file system.
+   - The application reads and decodes the QR code, extracting and displaying the stored user information.
+
+   ![QR Code Scanning](https://github.com/user-attachments/assets/4896c3c6-a9db-45ce-8df0-2ebd51a02de8)
 
 ## Technologies Used
 
-- **JavaFX**: For building the user interface.
+- **JavaFX**: For creating the graphical user interface.
 - **ZXing**: For QR code generation and decoding.
-- **MySQL**: For user authentication and data storage.
+- **MySQL**: For handling user authentication and data storage.
 
 ## Getting Started
 
-To get started with Authify, simply run the application and follow the on-screen instructions to log in or create a new account. The application will guide you through the QR code generation and scanning processes.
+To start using Authify, follow these steps:
 
+1. **Clone the Repository**:
+
+   ```bash
+   git clone https://github.com/djeghlaflydia/Authifyy.git
+   
+2. **Run the Application**:
+
+- Navigate to the project directory.
+- Execute the application and follow the on-screen instructions to log in or register.
+- The application will guide you through the QR code generation and scanning processes.
+  
+## Contributing
+Contributions to Authify are welcome! Please ensure that your changes are well-tested and adhere to the project's coding standards. If you have suggestions or encounter issues, feel free to submit a pull request or open an issue on GitHub.
 
 ---
 
