@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.regex.Pattern;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class SecondSeen extends Application {
 
     @FXML
@@ -62,13 +65,31 @@ public class SecondSeen extends Application {
         stage.show();
     }
 
+    public String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = md.digest(password.getBytes());
+
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
+            }
+
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
     @FXML
     public void SignUp(ActionEvent event) {
         String name = userNameSignUp.getText().trim();
         String email = EmailSignUp.getText().trim();
         String pass = PassWordSignUp.getText().trim();
 
-        // Validation des entrées utilisateur
         if (name.isEmpty() || email.isEmpty() || pass.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("Please fill in all fields.");
@@ -76,7 +97,6 @@ public class SecondSeen extends Application {
             return;
         }
 
-        // Vérifier le format de l'adresse email
         if (!isValidEmail(email)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("Please enter a valid email address.");
@@ -90,7 +110,7 @@ public class SecondSeen extends Application {
         ResultSet resultSet = null;
 
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javafx", "root", "12012005");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javafx", "root", "");
             psCheckExists = connection.prepareStatement("SELECT * FROM client WHERE name = ?");
             psCheckExists.setString(1, name);
             resultSet = psCheckExists.executeQuery();
@@ -104,25 +124,22 @@ public class SecondSeen extends Application {
                 EmailSignUp.clear();
                 PassWordSignUp.clear();
             } else {
-                // Insérer un utilisateur avec un mot de passe sécurisé
+                String hashedPass = hashPassword(pass);
                 psInsert = connection.prepareStatement("INSERT INTO client (name, email, pass) VALUES (?, ?, ?)");
                 psInsert.setString(1, name);
                 psInsert.setString(2, email);
-                psInsert.setString(3, pass); // Remplacer par un mot de passe haché
+                psInsert.setString(3, hashedPass);
                 psInsert.executeUpdate();
 
                 System.out.println("Username has been inserted");
-
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setContentText("Successfully signed up!");
                 alert.show();
 
-                // Effacer les champs de texte après l'inscription
                 userNameSignUp.clear();
                 EmailSignUp.clear();
                 PassWordSignUp.clear();
 
-                // Appelle enterPage avec l'instance du stage actuel
                 Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 enterPage(currentStage);
             }
@@ -132,7 +149,6 @@ public class SecondSeen extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // Fermer les ressources
             try {
                 if (resultSet != null) resultSet.close();
                 if (psCheckExists != null) psCheckExists.close();
@@ -143,6 +159,7 @@ public class SecondSeen extends Application {
             }
         }
     }
+
 
     // Méthode utilitaire pour vérifier le format de l'email
     private boolean isValidEmail(String email) {
