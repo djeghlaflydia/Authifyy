@@ -12,6 +12,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.*;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+
 public class MainSeen extends Application {
     private Connection connection;
     private Statement statement;
@@ -61,6 +65,21 @@ public class MainSeen extends Application {
     }
 
 
+    public static String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = md.digest(password.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
 
     @FXML
@@ -73,21 +92,24 @@ public class MainSeen extends Application {
         String name = userNameLogIn.getText();
         String pass = PassWordLogIn.getText();
 
+        // Hachage du mot de passe saisi
+        String hashedPassword = hashPassword(pass);
+
         java.sql.Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javafx", "root", "12012005");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javafx", "root", "");
             preparedStatement = connection.prepareStatement("SELECT pass FROM client WHERE name = ?");
             preparedStatement.setString(1, name);
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                // Utilisateur trouvé, vérifier le mot de passe
+                // Récupération du mot de passe haché dans la base de données
                 String retrievedPass = resultSet.getString("pass");
 
-                if (retrievedPass.equals(pass)) {
+                if (retrievedPass.equals(hashedPassword)) {
                     System.out.println("Username found in the database (you are logged in)");
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setContentText("Successfully logged in!");
@@ -96,11 +118,9 @@ public class MainSeen extends Application {
                     userNameLogIn.clear();
                     PassWordLogIn.clear();
 
-                    // Appelle enterPage avec l'instance du stage actuel
                     Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                     enterPage(currentStage);
-                }
-                else {
+                } else {
                     System.out.println("Wrong password");
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setContentText("Wrong password");
@@ -110,7 +130,6 @@ public class MainSeen extends Application {
                     PassWordLogIn.clear();
                 }
             } else {
-                // Utilisateur non trouvé
                 System.out.println("Username not found in the database");
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Provided credentials are incorrect!");
@@ -119,12 +138,9 @@ public class MainSeen extends Application {
                 userNameLogIn.clear();
                 PassWordLogIn.clear();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         } finally {
-            // Fermer les ressources
             try {
                 if (resultSet != null) resultSet.close();
                 if (preparedStatement != null) preparedStatement.close();
@@ -134,6 +150,7 @@ public class MainSeen extends Application {
             }
         }
     }
+
 
 
 
