@@ -21,6 +21,7 @@ import javax.imageio.ImageIO;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 
 import java.nio.file.*;
+import java.sql.*;
 import java.util.logging.*;
 
 
@@ -79,6 +80,10 @@ public class ThirdSeen extends Application {
     @FXML
     private TextField SpecialityQR;
     private int i=0;
+    @FXML
+    private Label codeGenerator;
+
+
 
     public void createQR() {
         labelImage.setVisible(false);
@@ -88,22 +93,24 @@ public class ThirdSeen extends Application {
         String bacYear = BacYearQR.getText();
         String speciality = SpecialityQR.getText();
 
-        // Combine all input fields into a single string
+        if (firstName.isEmpty() || lastName.isEmpty() || bacYear.isEmpty() || speciality.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Please fill in all fields.");
+            alert.show();
+            return;
+        }
+
         String qrContent = String.format("FirstName: %s\nLastName: %s\nBacYear: %s\nSpeciality: %s",
                 firstName, lastName, bacYear, speciality);
 
+        Path outputPath = null;
         try {
             // Generate QR code
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             BitMatrix bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, 256, 256);
 
-            /* Save QR code to file
-            String fileName = String.format("QR_%d.png", i);
-            Path outputPath = Paths.get("src/main/resources/app/Pic/" + fileName);
-            i++;*/
-            // Create a unique file name using timestamp
             String fileName = String.format("QR_%d.png", System.currentTimeMillis());
-            Path outputPath = Paths.get("src/main/resources/app/Pic/" + fileName);
+            outputPath = Paths.get("Authifyy/src/main/resources/app/Pic/" + fileName);
             MatrixToImageWriter.writeToPath(bitMatrix, "PNG", outputPath);
 
             // Load the saved QR code into ImageView
@@ -114,13 +121,61 @@ public class ThirdSeen extends Application {
         } catch (Exception ex) {
             Logger.getLogger(ThirdSeen.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        // Code generation
+        String lastNameCode = lastName.length() >= 2 ? lastName.substring(0, 2) : lastName;
+        String bacYearCode = bacYear.length() >= 2 ? bacYear.substring(bacYear.length() - 2) : bacYear;
+        String specialityCode;
+
+        if (speciality.contains(" ")) {
+            StringBuilder initials = new StringBuilder();
+            for (String word : speciality.split(" ")) {
+                if (!word.isEmpty()) {
+                    initials.append(word.charAt(0));
+                }
+            }
+            specialityCode = initials.toString();
+        } else {
+            specialityCode = speciality.length() >= 2 ? speciality.substring(0, 2) : speciality;
+        }
+
+        String generatedCode = lastNameCode + bacYearCode + specialityCode;
+        codeGenerator.setText(generatedCode);
+
+        // Database insertion
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javafx", "root", "");
+             PreparedStatement psInsert = connection.prepareStatement(
+                     "INSERT INTO info (LastName, FirstName, BacYear, Speciality, Code, QRCode) VALUES (?, ?, ?, ?, ?, ?)")) {
+
+            // Set values for each column
+            psInsert.setString(1, lastName);
+            psInsert.setString(2, firstName);
+            psInsert.setString(3, bacYear);
+            psInsert.setString(4, speciality);
+            // Store generated code
+            psInsert.setString(5, generatedCode);
+            // Read QR code image file as a binary stream
+            InputStream qrFileStream = Files.newInputStream(outputPath);
+            psInsert.setBinaryStream(6, qrFileStream, (int) Files.size(outputPath));
+
+            // Execute the insert
+            psInsert.executeUpdate();
+            qrFileStream.close();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("Information successfully saved!");
+            alert.show();
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
 
     public void addQR() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File("src/main/resources/app/Pic"));
+        fileChooser.setInitialDirectory(new File("Authifyy/src/main/resources/app/Pic/"));
         fileChooser.getExtensionFilters().addAll(
                 new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif")
         );
@@ -145,6 +200,8 @@ public class ThirdSeen extends Application {
 
                 // Décomposer le contenu en lignes
                 String[] lines = qrContent.split("\n");
+                String firstName = "", lastName = "", bacYear = "", speciality = "";
+
                 for (String line : lines) {
                     String[] parts = line.split(":");
                     if (parts.length == 2) {
@@ -154,19 +211,35 @@ public class ThirdSeen extends Application {
                         // Mettre à jour les champs en fonction des clés
                         switch (key) {
                             case "FirstName":
+                                firstName = value;
                                 FirstNameQR.setText(value);
                                 break;
                             case "LastName":
+                                lastName = value;
                                 LastNameQR.setText(value);
                                 break;
                             case "BacYear":
+                                bacYear = value;
                                 BacYearQR.setText(value);
                                 break;
                             case "Speciality":
+                                speciality = value;
                                 SpecialityQR.setText(value);
                                 break;
                         }
                     }
+                }
+
+                // Vérifier si l'information existe dans la base de données
+                String generatedCode = checkCodeInDatabase(lastName, firstName, bacYear, speciality);
+                if (generatedCode != null) {
+                    // Afficher le code si trouvé
+                    codeGenerator.setText(generatedCode);
+                } else {
+                    // Afficher un message d'information si aucune correspondance trouvée
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setContentText("No matching information found in the database.");
+                    alert.show();
                 }
 
             } catch (IOException | ReaderException e) {
@@ -175,8 +248,31 @@ public class ThirdSeen extends Application {
         }
     }
 
+    // Méthode pour vérifier le code dans la base de données
+    private String checkCodeInDatabase(String lastName, String firstName, String bacYear, String speciality) {
+        String generatedCode = null;
 
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javafx", "root", "");
+             PreparedStatement psSelect = connection.prepareStatement(
+                     "SELECT Code FROM info WHERE LastName = ? AND FirstName = ? AND BacYear = ? AND Speciality = ?")) {
 
+            // Set values for each parameter
+            psSelect.setString(1, lastName);
+            psSelect.setString(2, firstName);
+            psSelect.setString(3, bacYear);
+            psSelect.setString(4, speciality);
+
+            ResultSet resultSet = psSelect.executeQuery();
+            if (resultSet.next()) {
+                generatedCode = resultSet.getString("Code");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return generatedCode; 
+    }
 
     public static void main(String[] args) {
         launch();
