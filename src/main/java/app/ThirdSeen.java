@@ -110,7 +110,7 @@ public class ThirdSeen extends Application {
             BitMatrix bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, 256, 256);
 
             String fileName = String.format("QR_%d.png", System.currentTimeMillis());
-            outputPath = Paths.get("Authifyy/src/main/resources/app/Pic/" + fileName);
+            outputPath = Paths.get("src/main/resources/app/Pic/" + fileName);
             MatrixToImageWriter.writeToPath(bitMatrix, "PNG", outputPath);
 
             // Load the saved QR code into ImageView
@@ -175,7 +175,7 @@ public class ThirdSeen extends Application {
 
     public void addQR() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File("Authifyy/src/main/resources/app/Pic/"));
+        fileChooser.setInitialDirectory(new File("src/main/resources/app/Pic/"));
         fileChooser.getExtensionFilters().addAll(
                 new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif")
         );
