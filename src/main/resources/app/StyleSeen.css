@@ -2,7 +2,7 @@
     -fx-background-color: #081b29;
 }
 
-#PaneShadw, #labelImage{
+#PaneShadw, #labelImage, #codeGenerator{
     -fx-background: transparent;
     -fx-border-color: #0ef;
     -fx-border-width: 2px;
